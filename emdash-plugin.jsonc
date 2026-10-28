@@ -1,0 +1,43 @@
+{
+	"$schema": "./node_modules/@emdash-cms/plugin-cli/schemas/emdash-plugin.schema.json",
+
+	"slug": "indexnow",
+	"name": "IndexNow",
+	"description": "Notifies Bing, Yandex, Seznam, Naver and other IndexNow engines when content is published, changed or removed.",
+	"keywords": ["indexnow", "seo", "bing", "yandex", "search"],
+	// Atmosphere account (DID or handle) that owns registry releases. Replace before the first registry publish.
+	"publisher": "did:plc:REPLACE-WITH-TAGPERFECT-DID",
+
+	"license": "MIT",
+	"author": { "name": "Tag Perfect OÜ", "url": "https://tagperfect.eu", "email": "npm@tagperfect.eu" },
+	"security": { "url": "https://github.com/tagperfect/emdash-plugin-indexnow/security" },
+	"repo": "https://github.com/tagperfect/emdash-plugin-indexnow",
+
+	// Trust contract. content:read: the entry's status, slug, locale, SEO noindex flag and public URL.
+	// network:request: POST to the IndexNow endpoints below and nowhere else.
+	"capabilities": ["content:read", "network:request"],
+	"allowedHosts": [
+		"api.indexnow.org",
+		"www.bing.com",
+		"yandex.com",
+		"search.seznam.cz",
+		"searchadvisor.naver.com",
+		"indexnow.yep.com"
+	],
+	// Submission journal (newest 100), ordered by time.
+	"storage": {
+		"submissions": { "indexes": ["at"] }
+	},
+
+	"admin": {
+		"pages": [
+			{ "path": "/settings", "label": "IndexNow", "icon": "settings" },
+			{ "path": "/submissions", "label": "IndexNow submissions", "icon": "list" }
+		],
+		"widgets": [{ "id": "status", "title": "IndexNow", "size": "third" }]
+	},
+
+	"release": {
+		"artifacts": { "icon": { "file": "./assets/icon.png" } }
+	}
+}
