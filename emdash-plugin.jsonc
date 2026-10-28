@@ -38,6 +38,14 @@
 	},
 
 	"release": {
-		"artifacts": { "icon": { "file": "./assets/icon.png" } }
+		"artifacts": {
+			"icon": { "file": "./assets/icon.png" },
+			// Registry gallery, captured on a neutral demo site (example.com).
+			"screenshots": [
+				{ "file": "./assets/screenshots/1-dashboard-widget.png" },
+				{ "file": "./assets/screenshots/2-submissions.png" },
+				{ "file": "./assets/screenshots/3-settings.png" }
+			]
+		}
 	}
 }
