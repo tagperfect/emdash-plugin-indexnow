@@ -15,7 +15,7 @@
 
 	// Trust contract. content:read: the entry's status, slug, locale, SEO noindex flag and public URL.
 	// network:request: POST to the IndexNow endpoints below and nowhere else.
-	"capabilities": ["content:read", "network:request"],
+	"capabilities": ["content:read", "schema:read", "network:request"],
 	"allowedHosts": [
 		"api.indexnow.org",
 		"www.bing.com",

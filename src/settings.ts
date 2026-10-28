@@ -63,7 +63,7 @@ export function validateSettings(values: Record<string, unknown>): { ok: true; v
 			enabled: values.enabled === true,
 			key,
 			endpoint,
-			collections: parseCollections(str(values.collections)).join(", "),
+			collections: parseCollections(Array.isArray(values.collections) ? values.collections.join(",") : str(values.collections)).join(", "),
 			siteUrl,
 			keyLocation,
 			keyLocationUrl,

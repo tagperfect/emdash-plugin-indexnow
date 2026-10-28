@@ -204,6 +204,24 @@ describe("admin", () => {
 		expect(JSON.stringify(page.blocks)).toContain("resubmit");
 	});
 
+	it("lists the site's collections as checkboxes and saves the checked ones", async () => {
+		const page = await host.admin.loadPage("/settings");
+		expect(JSON.stringify(page.blocks)).toContain('"type":"checkbox","action_id":"collections"');
+		expect(JSON.stringify(page.blocks)).toContain('"value":"posts"');
+		const saved = await host.admin.submit("/settings", "save_settings", { enabled: true, key: KEY, collections: ["posts"] });
+		expect(saved.toast?.type).toBe("success");
+		expect(await host.inspect.setting("collections")).toBe("posts");
+	});
+
+	it("resubmits every collection when none is selected", async () => {
+		await respond(200);
+		await publish(await createPost("all"));
+		host.http.clear();
+		await respond(200);
+		await host.admin.act("/submissions", "resubmit_all");
+		expect(sent()[0]!.body.urlList).toEqual([`${SITE}/blog/all`]);
+	});
+
 	it("serves the key on the public key route", async () => {
 		const response = await host.actions.routes.request("key", { method: "GET" });
 		expect(response.status).toBe(200);

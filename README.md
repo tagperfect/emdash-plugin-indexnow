@@ -61,7 +61,7 @@ The key file must sit at the site root: per the protocol, a key file covers only
 | Submit URLs to IndexNow | off | Master switch. Nothing is sent while it is off. |
 | Key | empty | The IndexNow key. **Generate key** creates a 32-character key. |
 | Endpoint | `api.indexnow.org` | Where requests go. Any participant shares the URLs with the others; Bing, Yandex, Seznam, Naver and Yep endpoints can be chosen directly. |
-| Collections | empty (all) | Comma-separated collection slugs to track, e.g. `posts, pages`. **Resubmit all** needs a list (or URL rules). |
+| Collections | none checked (all) | The collections to track, picked from the site's collections. With none checked, every collection is tracked and **Resubmit all** reads every visible collection. |
 | Site URL | EmDash's site URL | The origin of submitted URLs, e.g. `https://example.com`. Set it when the admin runs on another host. Only URLs on this host are sent. |
 | Key file | Site root | `https://site/{key}.txt`, or a custom URL on the same host. |
 | URL rules | empty | Optional rules for URLs that the collection URL pattern cannot express (see below). |
@@ -97,6 +97,7 @@ price_items et /hinnad/                           # a price change pings the pri
 | Capability | Why |
 | --- | --- |
 | `content:read` | Read the changed entry: its status (drafts are skipped), SEO `noIndex` flag, slug, locale and fields used by URL rules, and its public URL. **Resubmit all** lists published entries of the tracked collections. |
+| `schema:read` | List the site's collections for the **Collections** checkboxes, and for **Resubmit all** when none are selected. |
 | `network:request` with `allowedHosts`: `api.indexnow.org`, `www.bing.com`, `yandex.com`, `search.seznam.cz`, `searchadvisor.naver.com`, `indexnow.yep.com` | `POST` the URL list to the IndexNow endpoint chosen in Settings. No other host can be reached. |
 
 No other host APIs are used. Settings, the journal (declared storage `submissions`) and internal state (KV) are plugin-scoped and need no capability.

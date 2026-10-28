@@ -186,14 +186,21 @@ export async function afterDelete(ctx: PluginContext, collection: string, id: st
 /** Max entries read per "resubmit all" run, to stay inside one request's limits. */
 export const RESUBMIT_LIMIT = 5_000;
 
+/** Every visible collection of the site (schema:read), else the collections named in URL rules. */
+async function allCollections(ctx: PluginContext, settings: Settings): Promise<string[]> {
+	const listed = await ctx.schema?.listCollections().catch(() => null);
+	if (listed?.length) return listed.filter((c) => !c.hidden).map((c) => c.slug);
+	return [...new Set(parseRules(settings.urlRules).rules.map((r) => r.collection))];
+}
+
 /** Collect the URLs of every live, indexable entry in the tracked collections and submit them. */
 export async function resubmitAll(ctx: PluginContext): Promise<{ outcome: Outcome | null; urls: number; error?: string }> {
 	const settings = await loadSettings(ctx);
 	const origin = siteOrigin(settings, ctx);
 	const reason = notReadyReason(settings, origin);
 	if (reason || !origin) return { outcome: null, urls: 0, error: reason ?? "Site URL unknown." };
-	const collections = settings.collections.length ? settings.collections : [...new Set(parseRules(settings.urlRules).rules.map((r) => r.collection))];
-	if (!collections.length) return { outcome: null, urls: 0, error: "List the collections to submit in Settings → Collections." };
+	const collections = settings.collections.length ? settings.collections : await allCollections(ctx, settings);
+	if (!collections.length) return { outcome: null, urls: 0, error: "Select the collections to submit in Settings → Collections." };
 
 	const urls: string[] = [];
 	let read = 0;

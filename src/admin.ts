@@ -1,4 +1,4 @@
-import type { Block, BlockInteraction, BlockResponse } from "@emdash-cms/blocks";
+import type { Block, BlockInteraction, BlockResponse, FormField } from "@emdash-cms/blocks";
 import type { PluginContext } from "emdash/plugin";
 
 import { ENDPOINTS, generateKey } from "./indexnow";
@@ -28,6 +28,19 @@ function urlCell(entry: Submission): string {
 	return entry.count > 1 ? `${first} (+${entry.count - 1})` : first;
 }
 
+/** Checkboxes of the site's collections (schema:read); a text field when the schema is unavailable. */
+async function collectionsField(ctx: PluginContext, settings: Settings): Promise<FormField> {
+	const label = "Collections (none checked = all)";
+	const listed = await ctx.schema?.listCollections().catch(() => null);
+	if (!listed?.length) {
+		return { type: "text_input", action_id: "collections", label, placeholder: "posts, pages", initial_value: settings.collectionsText };
+	}
+	const options = listed.filter((c) => !c.hidden).map((c) => ({ label: `${c.label} (${c.slug})`, value: c.slug }));
+	// Keep slugs that are saved but no longer listed, so saving the form does not drop them silently.
+	for (const slug of settings.collections) if (!options.some((o) => o.value === slug)) options.push({ label: `${slug} (not found)`, value: slug });
+	return { type: "checkbox", action_id: "collections", label, options, initial_value: settings.collections };
+}
+
 async function settingsPage(ctx: PluginContext, current?: Settings): Promise<BlockResponse> {
 	const settings = current ?? (await loadSettings(ctx));
 	const origin = siteOrigin(settings, ctx);
@@ -54,7 +67,7 @@ async function settingsPage(ctx: PluginContext, current?: Settings): Promise<Blo
 				options: ENDPOINTS.map((e) => ({ label: e.label, value: e.host })),
 				initial_value: settings.endpoint,
 			},
-			{ type: "text_input", action_id: "collections", label: "Collections", placeholder: "posts, pages (empty = all)", initial_value: settings.collectionsText },
+			await collectionsField(ctx, settings),
 			{ type: "text_input", action_id: "siteUrl", label: "Site URL", placeholder: ctx.site.url || "https://example.com", initial_value: settings.siteUrl },
 			{
 				type: "select",
