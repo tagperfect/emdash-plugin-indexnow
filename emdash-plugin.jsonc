@@ -4,7 +4,7 @@
 	"slug": "indexnow",
 	"name": "IndexNow",
 	"description": "Notifies Bing, Yandex, Seznam, Naver and other IndexNow engines when content is published, changed or removed.",
-	"keywords": ["indexnow", "seo", "bing", "yandex", "search"],
+	"keywords": ["indexnow", "seo", "search-engine", "bing", "yandex"],
 	// Atmosphere account (DID or handle) that owns registry releases. Replace before the first registry publish.
 	"publisher": "did:plc:REPLACE-WITH-TAGPERFECT-DID",
 

@@ -18,7 +18,7 @@ IndexNow is shared: a URL sent to one participating engine reaches all of them. 
 
 ## Install
 
-Requires EmDash 1.3.1 or later.
+Requires EmDash 1.0.1 or later (tested with 1.0.1, 1.1.0, 1.2.0, 1.3.0 and 1.3.1).
 
 ### From npm
 

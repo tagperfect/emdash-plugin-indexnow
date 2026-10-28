@@ -47,9 +47,35 @@ jobs:
           name: dist
           path: dist/
 
+  # The peer range promises EmDash >=1.0.1: run the tests against the oldest and each minor release.
+  compat:
+    name: Test with EmDash ${{ matrix.emdash }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        include:
+          - { emdash: 1.0.1, plugin-test: 0.2.6 }
+          - { emdash: 1.1.0, plugin-test: 0.2.7 }
+          - { emdash: 1.2.0, plugin-test: 0.2.8 }
+          - { emdash: 1.3.0, plugin-test: 0.2.9 }
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm add -D emdash@${{ matrix.emdash }} @emdash-cms/blocks@${{ matrix.emdash }} @emdash-cms/plugin-test@${{ matrix.plugin-test }}
+      - run: pnpm run typecheck
+      - run: pnpm test
+
   npm:
     name: Publish to npm
-    needs: build
+    needs: [build, compat]
     runs-on: ubuntu-latest
     environment: npm
     permissions:
