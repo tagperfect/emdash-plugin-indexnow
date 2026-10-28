@@ -5,8 +5,8 @@
 	"name": "IndexNow",
 	"description": "Notifies Bing, Yandex, Seznam, Naver and other IndexNow engines when content is published, changed or removed.",
 	"keywords": ["indexnow", "seo", "search-engine", "bing", "yandex"],
-	// Atmosphere account (DID or handle) that owns registry releases. Replace before the first registry publish.
-	"publisher": "did:plc:REPLACE-WITH-TAGPERFECT-DID",
+	// Atmosphere account that owns registry releases: tagperfect.eu (DID stays the same if the handle changes).
+	"publisher": "did:plc:lr22zhfqanjqau2oh4n4t5gn",
 
 	"license": "MIT",
 	"author": { "name": "Tag Perfect OÜ", "url": "https://tagperfect.eu", "email": "npm@tagperfect.eu" },
