@@ -131,7 +131,8 @@ jobs:
         with:
           subject-path: ${{ steps.prepare.outputs.bundle-file }}
       - name: Publish plugin
-        uses: emdash-cms/emdash/apps/release-action@main
+        # Candidate from emdash-cms/emdash#4467 (uploads release.artifacts media); back to @main after merge.
+        uses: emdash-cms/emdash/apps/release-action@57411d5be8a5bec8fd56a8ccf4857661d216ebd8
         with:
           service-url: https://releases.emdashcms.com
           publisher-did: ${{ steps.prepare.outputs.publisher-did }}
